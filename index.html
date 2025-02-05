@@ -28,6 +28,8 @@
             flex-direction: column;
             background: #444;
             border-radius: 10px;
+            height: calc(100vh - 70px);
+            padding-bottom: 70px;
         }
         #h {
             font-size: 14px;
@@ -41,20 +43,22 @@
             align-items: center;
             border: 1px solid #999;
             border-radius: 16px;
-            padding: 5px;
+            padding: 10px;
             background: #222;
             position: fixed;
-            bottom: 10px;
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
+            height: auto;
         }
         input {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: none;
             outline: none;
             background: transparent;
             color: #fff;
+            font-size: 16px;
         }
         input::placeholder {
             color: #999;
@@ -62,8 +66,8 @@
         button {
             border: 1px solid transparent;
             border-radius: 8px;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             cursor: pointer;
             display: flex;
             justify-content: center;
@@ -101,15 +105,38 @@
             margin-left: 39px;
             margin-bottom: 10px;
             background: #555;
-            padding: 10px;
+            padding: 12px;
             border-radius: 8px;
-            max-width: 80%;
+            max-width: 90%;
             word-wrap: break-word;
         }
         .user-message {
             align-self: flex-end;
             background: #19c37d;
             color: black;
+        }
+
+        /* Media Query untuk Ponsel */
+        @media (max-width: 768px) {
+            #co {
+                max-width: 100%;
+                height: calc(100vh - 80px);
+                padding: 15px;
+            }
+            #cb {
+                max-width: 100%;
+                padding: 8px;
+            }
+            input {
+                font-size: 14px;
+            }
+            button {
+                width: 40px;
+                height: 40px;
+            }
+            .response {
+                max-width: 85%;
+            }
         }
     </style>
 </head>
@@ -130,98 +157,345 @@
 
 <script>
     const responses = [
-    "Apakah Anda mengetahui... Maaf, saya tidak dapat menanyakannya sekarang.",
-    "Bagaimana Anda menjawab itu?",
-    "Bisakah Anda menjelaskannya dengan lebih baik?",
-    "Maaf, apakah Anda orang yang dapat dipercaya?",
-    "Apakah Anda baik-baik saja?",
-    "Maaf, apakah Anda telah sejahtera?",
-    "Dapatkah Anda lebih jujur?",
-    "Apakah Anda sering merasa terasing?",
-    "Maaf, apakah Anda orang yang tepat?",
-    "Baiklah, saya mempunyai sesuatu..."
-];
+        "Apakah Anda mengetahui... Maaf, saya tidak dapat menanyakannya sekarang.",
+        "Bagaimana Anda menjawab itu?",
+        "Bisakah Anda menjelaskannya dengan lebih baik?",
+        "Maaf, apakah Anda orang yang dapat dipercaya?",
+        "Apakah Anda baik-baik saja?",
+        "Maaf, apakah Anda telah sejahtera?",
+        "Dapatkah Anda lebih jujur?",
+        "Apakah Anda sering merasa terasing?",
+        "Maaf, apakah Anda orang yang tepat?",
+        "Baiklah, saya mempunyai sesuatu..."
+    ];
 
-let lastResponses = []; 
+    let lastResponses = []; 
 
-function scrollToBottom() {
-    const chatBox = document.getElementById("co");
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function getRandomResponse() {
-    let availableResponses = responses.filter(res => !lastResponses.includes(res));
-
-    if (availableResponses.length === 0) {
-        availableResponses = [...responses];
+    function scrollToBottom() {
+        const chatBox = document.getElementById("co");
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    const response = availableResponses[Math.floor(Math.random() * availableResponses.length)];
+    function getRandomResponse() {
+        let availableResponses = responses.filter(res => !lastResponses.includes(res));
 
-    lastResponses.push(response);
-    if (lastResponses.length > 2) {
-        lastResponses.shift();
+        if (availableResponses.length === 0) {
+            availableResponses = [...responses];
+        }
+
+        const response = availableResponses[Math.floor(Math.random() * availableResponses.length)];
+
+        lastResponses.push(response);
+        if (lastResponses.length > 2) {
+            lastResponses.shift();
+        }
+
+        return response;
     }
 
-    return response;
-}
+    function createMessageElement(user, message, isBot = false) {
+        const container = document.createElement("div");
+        const nameTag = document.createElement("div");
+        const responseText = document.createElement("div");
 
-function createMessageElement(user, message, isBot = false) {
-    const container = document.createElement("div");
-    const nameTag = document.createElement("div");
-    const responseText = document.createElement("div");
+        nameTag.className = "n";
+        nameTag.dataset.user = isBot ? "BCT" : "Y";
+        if (isBot) nameTag.classList.add("bot");
 
-    nameTag.className = "n";
-    nameTag.dataset.user = isBot ? "BCT" : "Y";
-    if (isBot) nameTag.classList.add("bot");
+        responseText.className = "response";
+        responseText.textContent = message;
+        if (!isBot) responseText.classList.add("user-message");
 
-    responseText.className = "response";
-    responseText.textContent = message;
-    if (!isBot) responseText.classList.add("user-message");
+        container.appendChild(nameTag);
+        container.appendChild(responseText);
 
-    container.appendChild(nameTag);
-    container.appendChild(responseText);
+        return container;
+    }
 
-    return container;
-}
+    function sendMessage() {
+        const inputField = document.getElementById("uI");
+        const chatBox = document.getElementById("h");
+        const sendBtn = document.getElementById("sendBtn");
 
-function sendMessage() {
-    const inputField = document.getElementById("uI");
-    const chatBox = document.getElementById("h");
-    const sendBtn = document.getElementById("sendBtn");
-    const sendIcon = document.getElementById("sendIcon");
+        const userInput = inputField.value.trim();
+        if (!userInput) return;
 
-    const userInput = inputField.value.trim();
-    if (!userInput) return;
-
-    chatBox.appendChild(createMessageElement("You", userInput));
-    scrollToBottom();
-
-    setTimeout(() => {
-        const botResponse = getRandomResponse();
-        chatBox.appendChild(createMessageElement("ChatBCT", botResponse, true));
+        chatBox.appendChild(createMessageElement("You", userInput));
         scrollToBottom();
 
-        if (botResponse === "Baiklah, saya mempunyai sesuatu...") {
-    sendBtn.onclick = function() {
-        window.location.href = "ChatBCT1.html";
-    };
-    sendBtn.innerHTML = "👁";
-} else {
-    sendBtn.onclick = sendMessage;
-    sendBtn.innerHTML = "";
-    sendBtn.appendChild(sendIcon);
-}
-    }, 500);
+        setTimeout(() => {
+            const botResponse = getRandomResponse();
+            chatBox.appendChild(createMessageElement("ChatBCT", botResponse, true));
+            scrollToBottom();
 
-    inputField.value = "";
-}
+            if (botResponse === "Baiklah, saya mempunyai sesuatu...") {
+                sendBtn.onclick = function() {
+                    window.location.href = "ChatBCT1.html";
+                };
+                sendBtn.innerHTML = "👁";
+            } else {
+                sendBtn.onclick = sendMessage;
+            }
+        }, 500);
 
-document.getElementById("uI").addEventListener("keyup", function (event) {
-    if (event.key === "Enter") {
-        sendMessage();
+        inputField.value = "";
     }
-});
+
+    document.getElementById("uI").addEventListener("keyup", function (event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatBCT</title>
+    <style>
+        body, input {
+            color: #fff;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: #333;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #co {
+            flex: 1;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            background: #444;
+            border-radius: 10px;
+            height: calc(100vh - 70px);
+            padding-bottom: 70px;
+        }
+        #h {
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+        }
+        #cb {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #999;
+            border-radius: 16px;
+            padding: 10px;
+            background: #222;
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            height: auto;
+        }
+        input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #fff;
+            font-size: 16px;
+        }
+        input::placeholder {
+            color: #999;
+        }
+        button {
+            border: 1px solid transparent;
+            border-radius: 8px;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #19c37d;
+            color: #000;
+        }
+        button:hover {
+            background: #16a085;
+        }
+        .n {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .n:before {
+            content: attr(data-user);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 1px solid #999;
+            margin-right: 10px;
+            font-size: 12px;
+            background: #16a085;
+            color: #fff;
+        }
+        .bot:before {
+            background-color: #19c37d;
+        }
+        .response {
+            margin-left: 39px;
+            margin-bottom: 10px;
+            background: #555;
+            padding: 12px;
+            border-radius: 8px;
+            max-width: 90%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            align-self: flex-end;
+            background: #19c37d;
+            color: black;
+        }
+
+        /* Media Query untuk Ponsel */
+        @media (max-width: 768px) {
+            #co {
+                max-width: 100%;
+                height: calc(100vh - 80px);
+                padding: 15px;
+            }
+            #cb {
+                max-width: 100%;
+                padding: 8px;
+            }
+            input {
+                font-size: 14px;
+            }
+            button {
+                width: 40px;
+                height: 40px;
+            }
+            .response {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="co">
+    <div id="h"></div>
+</div>
+
+<div id="cb">
+    <input type="text" id="uI" placeholder="Message ChatBCT..." autofocus>
+    <button id="sendBtn" onclick="sendMessage()">
+        <svg id="sendIcon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M7 11L12 6L17 11M12 18V7" stroke="#000" stroke-width="2"></path>
+        </svg>
+    </button>
+</div>
+
+<script>
+    const responses = [
+        "Apakah Anda mengetahui... Maaf, saya tidak dapat menanyakannya sekarang.",
+        "Bagaimana Anda menjawab itu?",
+        "Bisakah Anda menjelaskannya dengan lebih baik?",
+        "Maaf, apakah Anda orang yang dapat dipercaya?",
+        "Apakah Anda baik-baik saja?",
+        "Maaf, apakah Anda telah sejahtera?",
+        "Dapatkah Anda lebih jujur?",
+        "Apakah Anda sering merasa terasing?",
+        "Maaf, apakah Anda orang yang tepat?",
+        "Baiklah, saya mempunyai sesuatu..."
+    ];
+
+    let lastResponses = []; 
+
+    function scrollToBottom() {
+        const chatBox = document.getElementById("co");
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function getRandomResponse() {
+        let availableResponses = responses.filter(res => !lastResponses.includes(res));
+
+        if (availableResponses.length === 0) {
+            availableResponses = [...responses];
+        }
+
+        const response = availableResponses[Math.floor(Math.random() * availableResponses.length)];
+
+        lastResponses.push(response);
+        if (lastResponses.length > 2) {
+            lastResponses.shift();
+        }
+
+        return response;
+    }
+
+    function createMessageElement(user, message, isBot = false) {
+        const container = document.createElement("div");
+        const nameTag = document.createElement("div");
+        const responseText = document.createElement("div");
+
+        nameTag.className = "n";
+        nameTag.dataset.user = isBot ? "BCT" : "Y";
+        if (isBot) nameTag.classList.add("bot");
+
+        responseText.className = "response";
+        responseText.textContent = message;
+        if (!isBot) responseText.classList.add("user-message");
+
+        container.appendChild(nameTag);
+        container.appendChild(responseText);
+
+        return container;
+    }
+
+    function sendMessage() {
+        const inputField = document.getElementById("uI");
+        const chatBox = document.getElementById("h");
+        const sendBtn = document.getElementById("sendBtn");
+
+        const userInput = inputField.value.trim();
+        if (!userInput) return;
+
+        chatBox.appendChild(createMessageElement("You", userInput));
+        scrollToBottom();
+
+        setTimeout(() => {
+            const botResponse = getRandomResponse();
+            chatBox.appendChild(createMessageElement("ChatBCT", botResponse, true));
+            scrollToBottom();
+
+            if (botResponse === "Baiklah, saya mempunyai sesuatu...") {
+                sendBtn.onclick = function() {
+                    window.location.href = "ChatBCT1.html";
+                };
+                sendBtn.innerHTML = "👁";
+            } else {
+                sendBtn.onclick = sendMessage;
+            }
+        }, 500);
+
+        inputField.value = "";
+    }
+
+    document.getElementById("uI").addEventListener("keyup", function (event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
 </script>
 </body>
 </html>
