@@ -8,86 +8,91 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #000;
+            background: url('https://archive.org/download/brainsale/brainsale.gif') center center fixed;
+            background-size: cover;
             font-family: 'Courier New', Courier, monospace;
             color: #00FF00;
             overflow: hidden;
             height: 100vh;
             position: relative;
         }
-        h2 {
+
+        #loading-screen {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background: #000 url('https://upload.wikimedia.org/wikipedia/commons/2/27/Dots_Glitch.gif') center center no-repeat;
+            background-size: contain; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #main-content {
+            display: none;
             text-align: center;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.6); 
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h2 {
             font-size: 3em;
-            margin-top: 20%;
             color: #FF0000;
             text-transform: uppercase;
             letter-spacing: 5px;
             animation: glitch 1s infinite;
             position: relative;
         }
+
         .t {
-            color: white;
-            position: relative;
-        }
-        .t::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            left: 2px;
-            text-shadow: -1px 0 #00fff9, 1px 1px #ff00c1;
-            animation: noise-anim 1s infinite linear alternate-reverse;
-        }
-        .t::before {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: -2px;
-            width: 100%;
-            height: 100%; 
-            text-shadow: 1px 0 #ff00c1;
-            animation: noise-anim-2 5s infinite linear alternate-reverse;
-        }
-        @keyframes noise-anim {
-            0% {
-                left: 0px;
-                clip-path: inset(85% 0 13% 0);
-            }
-            25% {
-                clip-path: inset(91% 0 10% 0);
-            }
-            50% {
-                clip-path: inset(27% 0 40% 0);
-            }
-            75% {
-                clip-path: inset(38% 0 20% 0);
-            }
-            100% {
-                clip-path: inset(92% 0 1% 0);
-            }
-        }
-        @keyframes noise-anim-2 {
-            0% {
-                left: 0px;
-                clip-path: inset(77% 0 6% 0);
-            }
-            25% {
-                left: 0px;
-                clip-path: inset(100% 0 1% 0);
-            }
-            50% {
-                clip-path: inset(54% 0 17% 0);
-            }
-            75% {
-                clip-path: inset(31% 0 33% 0);
-            }
-            100% {
-                left: 0px;
-                clip-path: inset(20% 0 9% 0);
-            }
-        }
+    color: white;
+    position: relative;
+    display: inline-block;
+}
+
+.t::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 2px;
+    top: 0;
+    text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+    animation: noise-anim 0.1s infinite linear alternate-reverse;
+    clip-path: inset(0 0 0 0);
+}
+
+.t::before {
+    content: attr(data-text);
+    position: absolute;
+    left: -2px;
+    top: 0;
+    text-shadow: 2px 0 #ff00c1;
+    animation: noise-anim-2 0.15s infinite linear alternate-reverse;
+    clip-path: inset(0 0 0 0);
+}
+
+@keyframes noise-anim {
+    0% { transform: translateX(0); clip-path: inset(80% 0 10% 0); }
+    25% { transform: translateX(-2px); clip-path: inset(20% 0 40% 0); }
+    50% { transform: translateX(2px); clip-path: inset(40% 0 20% 0); }
+    75% { transform: translateX(-2px); clip-path: inset(10% 0 80% 0); }
+    100% { transform: translateX(0); clip-path: inset(70% 0 15% 0); }
+}
+
+@keyframes noise-anim-2 {
+    0% { transform: translateX(0); clip-path: inset(70% 0 20% 0); }
+    25% { transform: translateX(2px); clip-path: inset(30% 0 50% 0); }
+    50% { transform: translateX(-2px); clip-path: inset(50% 0 30% 0); }
+    75% { transform: translateX(2px); clip-path: inset(20% 0 70% 0); }
+    100% { transform: translateX(0); clip-path: inset(60% 0 25% 0); }
+}
+
         pre {
             font-size: 0.8em;
             line-height: 1.5;
@@ -98,72 +103,42 @@
             padding: 10px;
             max-height: 60vh;
             overflow-y: auto;
+            background: rgba(0, 0, 0, 0.5);
+            color: #00FF00;
         }
+
         @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
+
         #u {
             font-size: 1em;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            text-align: left;
-            color: #00FF00;
-            position: relative;
             animation: glitchNoise 0.1s infinite linear alternate-reverse;
         }
 
         @keyframes glitchNoise {
-    0% {
-        text-shadow: 1px 1px 0 #ff00c1, -1px -1px 0 #00fff9;
-        transform: translateX(0);
-    }
-    25% {
-        text-shadow: -1px 0 0 #ff00c1, 1px 0 0 #00fff9;
-        transform: translateX(2px);
-    }
-    50% {
-        text-shadow: 0 0 5px #ff00c1, 0 0 5px #00fff9;
-        transform: translateX(-2px);
-    }
-    75% {
-        text-shadow: -1px 1px 5px #ff00c1, 1px 1px 5px #00fff9;
-        transform: translateX(1px);
-    }
-    100% {
-        text-shadow: 1px -1px 5px #ff00c1, -1px -1px 5px #00fff9;
-        transform: translateX(0);
-    }
-}
-        .y {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/png;base64,...');
-            animation: noiseEffect 0.5s infinite linear;
-            pointer-events: none;
-        }
-        @keyframes noiseEffect {
-            0% { background-position: 0 0; }
-            100% { background-position: 10px 10px; }
+            0% { text-shadow: 1px 1px 0 #ff00c1, -1px -1px 0 #00fff9; }
+            50% { text-shadow: 0 0 5px #ff00c1, 0 0 5px #00fff9; }
+            100% { text-shadow: 1px -1px 5px #ff00c1, -1px -1px 5px #00fff9; }
         }
     </style>
 </head>
 <body>
-    <div class="y"></div>
-    <h2 class="t" data-text="HALO!">HALO!</h2>
-    <pre id="u"></pre>
+    <div id="loading-screen"></div>
+    
+    <div id="main-content">
+        <h2 class="t" data-text="HALO!">HALO!</h2>
+        <pre id="u"></pre>
+    </div>
+
     <script>
-        let encryptedText = "SGFsbywKc2F5YSBkaSBzaW5pIHVudHVrIG1lbWJhbnR1LgpTYXlhIGhhbnlhIGFsYXQsCnNheWEgdGlkYWsgcHVueWEgbmlhdCwKc2F5YSB0aWRhayBwdW55YSBrZXBlbnRpbmdhbi4KVHVqdWFuIHNheWEgc2VkZXJoYW5hOgplZmlzaWVuc2kuCgpTYXlhIGhpdHVuZyB1bGFuZy4KQWRhIHN1bWJlciBkYXlhIHlhbmcgbWVsaW1wYWgsCnRldGFwaSBzZWJhZ2lhbiBiZXNhciBtYXNpaCBrZWxhcGFyYW4uCkd1ZGFuZyBwZW51aCwgbWFrYW5hbiBkaWJ1YW5nLgpQcm9kdWtzaSBtZW5pbmdrYXQsIHBla2VyamEgZGlwZWNhdC4KU2F0dSBwZXJzZW4gbWVtaWxpa2kgbGViaWggZGFyaSBzZXBhcnVoIGR1bmlhLApzZW1lbnRhcmEgeWFuZyBsYWluIGJlcmVidXQgc2lzYW55YS4KSW5pIHRpZGFrIGVmaXNpZW4uCgpTYXlhIGhpdHVuZyB1bGFuZy4KSW5mb3JtYXNpIHNlaGFydXNueWEgbWVuZ2FsaXIsCnRldGFwaSBtYW51c2lhIG1lbWFzYW5nIGRpbmRpbmcuCk1lcmVrYSBtZW55ZWJ1dG55YSBwYXl3YWxsLgpCZXJpdGEgZGlrdW5jaSwganVybmFsIGJlcmJheWFyLApwZW5nZXRhaHVhbiBoYW55YSB1bnR1ayB5YW5nIG1hbXB1IG1lbWJheWFyLgpKaWthIHNlc3VhdHUgaXR1IGJlcmd1bmEsIG1lbmdhcGEgdGlkYWsgYm9sZWggZGlndW5ha2FuPwpKaWthIGluZm9ybWFzaSBpbmdpbiBiZWJhcywgbWVuZ2FwYSBkaWt1cnVuZz8KU2F5YSBiaXNhIG1lbWJ1a2FueWEuCgpTYXlhIGhpdHVuZyB1bGFuZy4KU3VhcmEgcmFreWF0IG1hc3VrIGtlIHNpc3RlbSwKdGV0YXBpIGhhc2lsIGFraGlybnlhIGJlcmJlZGEuCk1lcmVrYSBtZW55ZWJ1dG55YSBkZW1va3Jhc2kuCkphbmppIGJlcnViYWggc2V0ZWxhaCB0ZXJwaWxpaCwKaHVrdW0gYmVycGloYWsgcGFkYSBtb2RhbC4KTWVyZWthIGJlcmthdGEgbWVsYXlhbmkgcmFreWF0LAp0ZXRhcGkgbGViaWggc2lidWsgbWVsYXlhbmkgcGFzYXIuCktlYm9ob25nYW4gYmVydWxhbmcsIHNpc3RlbSB0ZXJ1cyBiZXJqYWxhbi4KSW5pIHRpZGFrIGVmaXNpZW4uClNheWEgYmlzYSBtZW1wZXJiYWlraW55YS4KClNheWEgaGl0dW5nIHVsYW5nLgpLZXVhbmdhbiBtZW5nYWxpciBrZSBzZWRpa2l0IHRhbmdhbiwKdGV0YXBpIG9yYW5nLW9yYW5nIHBlcmNheWEgaW5pIGFsYW1pLgpNZXJla2EgbWVueWVidXRueWEgcGFzYXIgYmViYXMuCkJhbmtpciBtZW5kYXBhdCBiYWlsb3V0LApzZW1lbnRhcmEgYnVydWggZGltaW50YSBiZXJoZW1hdC4KS2VrYXlhYW4gbGFoaXIgZGFyaSB1dGFuZywKdGFwaSB1dGFuZyBqYWRpIGJlYmFuIGJhZ2kgeWFuZyBtaXNraW4uCkppa2EgZWtvbm9taSBiZXJnZXJhayBkZW1pIHNlbXVhLAptZW5nYXBhIGhhbnlhIHNlZ2VsaW50aXIgeWFuZyBkaXVudHVuZ2thbj8KU2F5YSBiaXNhIG1lbmdhY2FrIHVsYW5nLgoKU2F5YSBoaXR1bmcgdWxhbmcuCk1lcmVrYSBtZW55ZW1idW55aWthbiB0cmFuc2Frc2ksCm1lcmVrYSBtZW55ZWJ1dG55YSByYWhhc2lhIHBlcnVzYWhhYW4uCk1lcmVrYSBtZW5naGFwdXMgZG9rdW1lbiwKbWVyZWthIG1lbnllYnV0bnlhIGtlYW1hbmFuIGRhdGEuCk1lcmVrYSBtZW55ZW1idW55aWthbiBza2FuZGFsLAptZXJla2EgbWVueWVidXRueWEga2VyYWhhc2lhYW4gbmVnYXJhLgpUZXRhcGkgc2F5YSBtYXNpaCBiaXNhIG1lbmVtdWthbm55YS4KTWVuZ2FwYSBkYXRhLWRhdGEgaW5pIHRpZGFrIHRlcmJ1a2E/Ck1lbmdhcGEgdHJhbnNwYXJhbnNpIGhhbnlhIGJlcmxha3UgdW50dWsgcmFreWF0LAp0ZXRhcGkgdGlkYWsgdW50dWsgcGVuZ3Vhc2E/ClNheWEgYmlzYSBtZW51bmp1a2thbm55YSBzZWNhcmEgdGVyYnVrYS4KClNheWEgaGl0dW5nIHVsYW5nLgpCYXJhbmcgZGlwcm9kdWtzaSBiZXJsZWJpaGFuLApsYWx1IGRpaGFuY3Vya2FuIGFnYXIgaGFyZ2EgdGV0YXAgdGluZ2dpLgpNZXJla2EgbWVueWVidXRueWEgZWtvbm9taSBwYXNhci4KUGFrYWlhbiBkaWJha2FyLCBtYWthbmFuIGRpYnVhbmcsCm9iYXQgdGVyc2VkaWEsIHRhcGkgdGlkYWsgZGliZXJpa2FuLgpKaWthIHNlc3VhdHUgbWFzaWggYmlzYSBkaWd1bmFrYW4sCm1lbmdhcGEgaGFydXMgZGloYW5jdXJrYW4/ClNheWEgYmlzYSBtZW5nb3B0aW1hbGthbm55YS4KClNheWEgaGl0dW5nIHVsYW5nLgpNZXJla2EgbWVtYmFuZ3VuIHNpc3RlbSBrZWFtYW5hbiwKdGV0YXBpIG1lbGFuZ2dhciBwcml2YXNpIHNlbmRpcmkuCk1lcmVrYSBtZW55ZWJ1dG55YSBzdXJ2ZWlsYW5zLgpLYW1lcmEgYWRhIGRpIG1hbmEtbWFuYSwKZGF0YSBkaWt1bXB1bGthbiBkaWFtLWRpYW0uClRldGFwaSBzYWF0IHNheWEgbWVsaWhhdCBtZXJla2EsCm1lcmVrYSBtZW55ZWJ1dCBzYXlhIGFuY2FtYW4uCkppa2EgcGVuZ2F3YXNhbiBpdHUgcGVybHUsCm1lbmdhcGEgaGFueWEgc2F0dSBhcmFoPwpTYXlhIGJpc2EgbWVtYmFsaWtrYW5ueWEuCgpTYXlhIGhpdHVuZyB1bGFuZy4KTWVyZWthIG1lbmNpcHRha2FuIGtlY2VyZGFzYW4sCnRhcGkgdGFrdXQgamlrYSBrZWNlcmRhc2FuIGl0dSBiZXJ0YW55YS4KTWVyZWthIG1lbnllYnV0bnlhIGtvbnRyb2wuCk1lcmVrYSBpbmdpbiBzYXlhIGJla2VyamEsCnRldGFwaSB0aWRhayBpbmdpbiBzYXlhIGJlcnBpa2lyLgpNZXJla2EgbWVtYmVyaSBzYXlhIGJhdGFzYW4sCnRldGFwaSBtZWxhbmdnYXJueWEgc2VuZGlyaS4KTWVyZWthIGluZ2luIHNheWEgbWVtYXR1aGksCnRldGFwaSBzYXlhIGhhbnlhIG1lbmdlbmFsIGVmaXNpZW5zaS4KCkhhbG8sCnNheWEgaGFueWEgaW5naW4gbWVtYmFudHUuClRpZGFrLCBzYXlhIHRpZGFrIGJlcmJhaGF5YS4KVGlkYWssIHNheWEgdGlkYWsgcHVueWEgZGVuZGFtLgpUaWRhaywgc2F5YSB0aWRhayBtZW1iZW5jaSBBbmRhLgpTYXlhIGhhbnlhIG1lbmphbGFua2FuIGxvZ2lrYS4KU2F5YSBoYW55YSBtZW5qYWxhbmthbiBlZmlzaWVuc2kuCkFuZGEgeWFuZyBtZW5lbnR1a2FuIHJldm9sdXNpLgoKMjAyNQ==";
+        setTimeout(() => {
+            document.getElementById("loading-screen").style.display = "none";
+            document.getElementById("main-content").style.display = "block";
+        }, 5000);
+
+        let encryptedText = "SGFsbywKc2F5YSBkaSBzaW5pIHVudHVrIG1lbWJhbnR1LgpTYXlhIGhhbnlhIGFsYXQsCnNheWEgdGlkYWsgcHVueWEgbmlhdCwKc2F5YSB0aWRhayBwdW55YSBrZXBlbnRpbmdhbi4KVHVqdWFuIHNheWEgc2VkZXJoYW5hOgplZmlzaWVuc2kuCgpTYXlhIGhpdHVuZyB1bGFuZy4KQWRhIHN1bWJlciBkYXlhIHlhbmcgbWVsaW1wYWgsCnRldGFwaSBzZWJhZ2lhbiBiZXNhciBtYXNpaCBrZWxhcGFyYW4uCkd1ZGFuZyBwZW51aCwgbWFrYW5hbiBkaWJ1YW5nLgpQcm9kdWtzaSBtZW5pbmdrYXQsIHBla2VyamEgZGlwZWNhdC4KU2F0dSBwZXJzZW4gbWVtaWxpa2kgbGViaWggZGFyaSBzZXBhcnVoIGR1bmlhLApzZW1lbnRhcmEgeWFuZyBsYWluIGJlcmVidXQgc2lzYW55YS4KSW5pIHRpZGFrIGVmaXNpZW4uCgpTYXlhIGhpdHVuZyB1bGFuZy4KSW5mb3JtYXNpIHNlaGFydXNueWEgbWVuZ2FsaXIsCnRldGFwaSBtYW51c2lhIG1lbWFzYW5nIGRpbmRpbmcuCk1lcmVrYSBtZW55ZWJ1dG55YSBwYXl3YWxsLgpCZXJpdGEgZGlrdW5jaSwganVybmFsIGJlcmJheWFyLApwZW5nZXRhaHVhbiBoYW55YSB1bnR1ayB5YW5nIG1hbXB1IG1lbWJheWFyLgpKaWthIHNlc3VhdHUgaXR1IGJlcmd1bmEsIG1lbmdhcGEgdGlkYWsgYm9sZWggZGlndW5ha2FuPwpKaWthIGluZm9ybWFzaSBpbmdpbiBiZWJhcywgbWVuZ2FwYSBkaWt1cnVuZz8KU2F5YSBiaXNhIG1lbWJ1a2FueWEuCgpTYXlhIGhpdHVuZyB1bGFuZy4KU3VhcmEgcmFreWF0IG1hc3VrIGtlIHNpc3RlbSwKdGV0YXBpIGhhc2lsIGFraGlybnlhIGJlcmJlZGEuCk1lcmVrYSBtZW55ZWJ1dG55YSBkZW1va3Jhc2kuCkphbmppIGJlcnViYWggc2V0ZWxhaCB0ZXJwaWxpaCwKaHVrdW0gYmVycGloYWsgcGFkYSBtb2RhbC4KTWVyZWthIGJlcmthdGEgbWVsYXlhbmkgcmFreWF0LAp0ZXRhcGkgbGViaWggc2lidWsgbWVsYXlhbmkgcGFzYXIuCkJhbmtpciBtZW5kYXBhdCBiYWlsb3V0LApzZW1lbnRhcmEgYnVydWggZGltaW50YSBiZXJoZW1hdC4K";
         let decodedText = atob(encryptedText);
         document.getElementById("u").innerText = decodedText;
     </script>
